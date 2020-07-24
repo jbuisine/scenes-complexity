@@ -45,7 +45,7 @@ def main():
     p_folder = args.folder
     p_output = args.output
 
-    estimators = ['l_variance', 'l_mean', 'sv_struct', 'sv_noise', 'sobel', 'l_kolmogorov']
+    estimators = ['sv_noise_all']
 
     folders = [ f for f in os.listdir(p_folder) if 'min_max' not in f ]
 
@@ -82,7 +82,13 @@ def main():
             x = []
             
             for estimator in estimators:
-                x.append(estimate(estimator, b))
+                estimated = estimate(estimator, b)
+                
+                if not isinstance(estimated, np.float64):
+                    for v in estimated:
+                        x.append(v)
+                else:
+                    x.append(estimated)
 
             line = img_path + ';' + str(index) + ';'
             for v in x:
@@ -91,7 +97,7 @@ def main():
 
             datafile.write(line)
 
-            write_progress((i * n_zones + index) / (float(len(folders)) * float(n_zones)))
+            write_progress((i * n_zones + index + 1) / (float(len(folders)) * float(n_zones)))
 
 
     datafile.close()

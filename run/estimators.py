@@ -1,3 +1,4 @@
+import sys
 import numpy as np
 import gzip
 
@@ -7,7 +8,7 @@ import cv2
 from ipfml import utils
 from ipfml.processing import transform, segmentation
 
-estimators_list = ['variance', 'l_variance', 'mean', 'l_mean', 'sv_struct', 'sv_noise', 'sobel', 'l_kolmogorov']
+estimators_list = ['variance', 'l_variance', 'mean', 'l_mean', 'sv_struct', 'sv_noise', 'sobel', 'l_kolmogorov', 'sv_struct_all', 'sv_noise_all']
 
 def estimate(estimator, arr):
 
@@ -23,8 +24,14 @@ def estimate(estimator, arr):
     if estimator == 'l_mean':
         return np.mean(transform.get_LAB_L(arr))
 
+    if estimator == 'sv_struct_all':
+        return transform.get_LAB_L_SVD_s(arr)[0:50]
+
     if estimator == 'sv_struct':
         return np.mean(transform.get_LAB_L_SVD_s(arr)[0:50])
+
+    if estimator == 'sv_noise_all':
+        return transform.get_LAB_L_SVD_s(arr)[50:]
 
     if estimator == 'sv_noise':
         return np.mean(transform.get_LAB_L_SVD_s(arr)[50:])
@@ -49,3 +56,6 @@ def estimate(estimator, arr):
         compress_data = gzip.compress(bytes_data)
 
         return sys.getsizeof(compress_data)
+
+    if estimator == 'l_sv_entropy':
+        pass
