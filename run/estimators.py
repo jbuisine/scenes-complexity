@@ -6,9 +6,10 @@ import gzip
 from PIL import Image
 import cv2
 from ipfml import utils
-from ipfml.processing import transform, segmentation
+from ipfml.processing import transform, segmentation, compression
+from ipfml.utils import get_entropy
 
-estimators_list = ['variance', 'l_variance', 'mean', 'l_mean', 'sv_struct', 'sv_noise', 'sobel', 'l_kolmogorov', 'sv_struct_all', 'sv_noise_all']
+estimators_list = ['variance', 'l_variance', 'mean', 'l_mean', 'sv_struct', 'sv_noise', 'sobel', 'l_kolmogorov', 'sv_struct_all', 'sv_noise_all', 'l_sv_entropy_blocks']
 
 def estimate(estimator, arr):
 
@@ -57,5 +58,19 @@ def estimate(estimator, arr):
 
         return sys.getsizeof(compress_data)
 
-    if estimator == 'l_sv_entropy':
-        pass
+    if estimator == 'l_sv_entropy_blocks':
+
+        # get L channel
+        L_channel = transform.get_LAB_L(arr)
+
+        # split in n block
+        blocks = segmentation.divide_in_blocks(L_channel, (8, 8))
+
+        entropy_list = []
+
+        for block in blocks:
+            reduced_sigma = compression.get_SVD_s(block)
+            reduced_entropy = get_entropy(reduced_sigma)
+            entropy_list.append(reduced_entropy)
+
+        return entropy_list

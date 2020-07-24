@@ -45,7 +45,7 @@ def main():
     p_folder = args.folder
     p_output = args.output
 
-    estimators = ['sv_noise_all']
+    estimators = ['l_sv_entropy_blocks']
 
     folders = [ f for f in os.listdir(p_folder) if 'min_max' not in f ]
 
