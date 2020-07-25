@@ -64,7 +64,7 @@ def estimate(estimator, arr):
         L_channel = transform.get_LAB_L(arr)
 
         # split in n block
-        blocks = segmentation.divide_in_blocks(L_channel, (8, 8))
+        blocks = segmentation.divide_in_blocks(L_channel, (20, 20))
 
         entropy_list = []
 

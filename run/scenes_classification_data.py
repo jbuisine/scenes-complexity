@@ -38,14 +38,15 @@ def main():
     parser = argparse.ArgumentParser(description="Check complexity of each zone of scene using estimator during rendering")
 
     parser.add_argument('--folder', type=str, help='folder where scenes with png scene file are stored')
+    parser.add_argument('--estimators', type=str, help='list of estimators', default='l_mean,l_variance')
     parser.add_argument('--output', type=str, help='output data filename', required=True)
 
     args = parser.parse_args()
 
     p_folder = args.folder
+    p_estimators = [ i.strip() for i in args.estimators.split(',') ]
     p_output = args.output
-
-    estimators = ['l_sv_entropy_blocks']
+    print(p_estimators)
 
     folders = [ f for f in os.listdir(p_folder) if 'min_max' not in f ]
 
@@ -81,7 +82,7 @@ def main():
             # extract data and write into file
             x = []
             
-            for estimator in estimators:
+            for estimator in p_estimators:
                 estimated = estimate(estimator, b)
                 
                 if not isinstance(estimated, np.float64):
