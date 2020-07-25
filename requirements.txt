@@ -1,0 +1,5 @@
+ipfml
+numpy
+matplotlib
+opencv-python
+Pillow
