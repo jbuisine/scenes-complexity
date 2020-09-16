@@ -68,6 +68,9 @@ def main():
     kmeans = KMeans(init='k-means++', n_clusters=p_clusters, n_init=10)
     labels = kmeans.fit(x_values).labels_
 
+    unique, counts = np.unique(labels, return_counts=True)
+    print(dict(zip(unique, counts)))
+
     pca = PCA(n_components=2)
     x_data = pca.fit_transform(x_values)
 
@@ -105,9 +108,9 @@ def main():
 
         setattr(annot,'offsetbox', imagebox)
         annot.xy = pos
-        text = "{}, {}".format(" ".join(list(map(str,ind["ind"]))), 
-                            " ".join([images_path[n] for n in ind["ind"]]))
-        annot.text(text)
+        # text = "{}, {}".format(" ".join(list(map(str,ind["ind"]))), 
+        #                     " ".join([images_path[n] for n in ind["ind"]]))
+        # annot.text(text)
         # #annot.get_bbox_patch().set_facecolor(cmap(norm(c[ind["ind"][0]])))
         # annot.get_bbox_patch().set_alpha(0.4)
 
