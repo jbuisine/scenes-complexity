@@ -71,7 +71,7 @@ def main():
         images = sorted([ i for i in os.listdir(scene_folder) if '.png' in i ])
 
         # get reference image
-        img_path = os.path.join(scene_folder, images[-1])
+        img_path = os.path.join(scene_folder, images[0])
 
         img_arr = np.array(Image.open(img_path))
 
@@ -91,7 +91,7 @@ def main():
                 else:
                     x.append(estimated)
 
-            line = img_path + ';' + str(index) + ';'
+            line = scene + ';' + img_path + ';' + str(index) + ';'
             for v in x:
                 line += str(v) + ';'
             line += '\n'

@@ -15,9 +15,11 @@ from matplotlib.offsetbox import (TextArea, DrawingArea, OffsetImage,
                                   AnnotationBbox)
 
 # ml imports
+import joblib
 from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
 
+model_output_folder = 'data/models'
 
 def main():
 
@@ -37,16 +39,21 @@ def main():
     images_path = []
     images = []
     zones = []
+    scenes = []
 
     with open(p_data, 'r') as f:
         for line in f.readlines():
             data = line.split(';')
             del data[-1]
 
-            images_path.append(data[0])
-            zones.append(int(data[1]))
+            scene = data[0]
+            if scene not in scenes:
+                scenes.append(scene)
 
-            img_arr = segmentation.divide_in_blocks(Image.open(data[0]), (200, 200))[int(data[1])]
+            images_path.append(data[1])
+            zones.append(int(data[2]))
+
+            img_arr = segmentation.divide_in_blocks(Image.open(data[1]), (200, 200))[int(data[2])]
             images.append(np.array(img_arr))
 
             x = []
@@ -55,10 +62,14 @@ def main():
 
             x_values.append(x)    
 
-
+    print(scenes)
     # plt.show()
+    # TODO : save kmean model
     kmeans = KMeans(init='k-means++', n_clusters=p_clusters, n_init=10)
     labels = kmeans.fit(x_values).labels_
+
+    unique, counts = np.unique(labels, return_counts=True)
+    print(dict(zip(unique, counts)))
 
     pca = PCA(n_components=2)
     x_data = pca.fit_transform(x_values)
@@ -99,7 +110,7 @@ def main():
         annot.xy = pos
         # text = "{}, {}".format(" ".join(list(map(str,ind["ind"]))), 
         #                     " ".join([images_path[n] for n in ind["ind"]]))
-        # annot.set_text(text)
+        # annot.text(text)
         # #annot.get_bbox_patch().set_facecolor(cmap(norm(c[ind["ind"][0]])))
         # annot.get_bbox_patch().set_alpha(0.4)
 
@@ -119,6 +130,12 @@ def main():
 
     fig.canvas.mpl_connect("motion_notify_event", hover)
     plt.show()
+
+    if not os.path.exists(model_output_folder):
+        os.makedirs(model_output_folder)
+
+    model_path = os.path.join(model_output_folder, p_output + '.joblib')
+    joblib.dump(kmeans, model_path)
     
 if __name__ == "__main__":
     main()
