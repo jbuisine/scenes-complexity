@@ -12,7 +12,7 @@ from ipfml.utils import get_entropy
 from scipy.signal import medfilt2d, wiener, cwt
 import pywt
 
-estimators_list = ['variance', 'l_variance', 'mean', 'l_mean', 'sv_struct', 'sv_noise', 'sobel', 'l_kolmogorov', 'sv_struct_all', 'sv_noise_all', 'l_sv_entropy_blocks']
+estimators_list = ['variance', 'l_variance', 'mean', 'l_mean', 'sv_struct', 'sv_noise', 'sobel', 'l_kolmogorov', 'sv_struct_all', 'sv_noise_all', 'l_sv_entropy_blocks', '26_attributes', 'statistics_extended']
 
 def estimate(estimator, arr):
 
