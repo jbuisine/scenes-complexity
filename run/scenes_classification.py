@@ -57,7 +57,7 @@ def main():
             images.append(np.array(img_arr))
 
             x = []
-            for v in data[2:]:
+            for v in data[3:]:
                 x.append(float(v))
 
             x_values.append(x)    
