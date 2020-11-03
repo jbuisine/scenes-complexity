@@ -59,7 +59,10 @@ def estimate(estimator, arr):
         bytes_data = lab_img.tobytes()
         compress_data = gzip.compress(bytes_data)
 
-        return sys.getsizeof(compress_data)
+        mo_size = sys.getsizeof(compress_data) / 1024.
+        go_size = mo_size / 1024.
+
+        return np.float64(go_size)
 
     if estimator == 'l_sv_entropy_blocks':
 
