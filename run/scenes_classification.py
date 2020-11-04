@@ -129,12 +129,13 @@ def main():
                     fig.canvas.draw_idle()
 
     fig.canvas.mpl_connect("motion_notify_event", hover)
-    plt.show()
+    #plt.show()
 
     if not os.path.exists(model_output_folder):
         os.makedirs(model_output_folder)
 
     model_path = os.path.join(model_output_folder, p_output + '.joblib')
+    print('Model saved into {0}'.format(model_path))
     joblib.dump(kmeans, model_path)
     
 if __name__ == "__main__":
